@@ -109,15 +109,7 @@ python launch.py
 ```
 
 Un menu interactif s'affiche :
-=================================================================
-🔒 Web Vulnerability Scanner v1.0
-[1] 🌐  Analyser un site          Headers, Cookies, CSRF
-[2] 🔍  Fuzzing de répertoires    Découverte de pages cachées
-[3] 💉  Test injection SQL        Error-based SQLi  (bientôt)
-[4] ⚡  Test XSS                  Reflected XSS     (bientôt)
-[5] 🗂️   Scan complet             Toutes les analyses
-[0] ❌  Quitter
-=================================================================
+<img width="935" height="416" alt="image" src="https://github.com/user-attachments/assets/b2b2cc36-c615-47e0-8b00-02fcaad56acb" />
 
 ---
 
