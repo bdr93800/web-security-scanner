@@ -72,8 +72,7 @@ web-security-scanner/
 ├── verif_header.py      # Analyse des headers HTTP
 ├── verif_cookies.py     # Analyse des cookies
 ├── verif_csrf.py        # Analyse CSRF
-├── fuzzing.py           # Fuzzing de répertoires (multithreading)
-├── wordlist.txt         # Wordlist par défaut
+├── fuzzing.py           # Fuzzing de répertoires (multithreading)      
 ├── requirements.txt     # Dépendances
 └── README.md
 ```
