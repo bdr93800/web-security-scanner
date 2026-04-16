@@ -1,4 +1,3 @@
-import argparse
 import requests
 from bs4 import BeautifulSoup
 
@@ -6,15 +5,9 @@ from verif_header import verif_headers
 from verif_cookies import verif_cookies
 from verif_csrf import verif_csrf
 
-def main():
-    #  1. Récupérer l'URL
-    parser = argparse.ArgumentParser(description="Mini scanner de sécurité web")
-    parser.add_argument("url", help="URL cible à analyser")
-    args = parser.parse_args()
+def scanner_site(url):
 
-    url = args.url
-
-    #  2. Requête HTTP
+    # 1. Requête HTTP
     try:
         response = requests.get(url, timeout=10)
     except requests.RequestException as e:
@@ -24,16 +17,11 @@ def main():
     headers = response.headers
     set_cookie_headers = response.raw.headers.get_all("Set-Cookie") or []
 
-    # parsing HTML
-    html = response.text
-
-
-    soup = BeautifulSoup(html, "html.parser")
-
+    # 2. Parsing HTML
+    soup = BeautifulSoup(response.text, "html.parser")
     forms = soup.find_all("form")
 
-
-    #  3. Analyse
+    # 3. Analyse
     resultats_headers = verif_headers(headers)
     resultats_cookies = verif_cookies(set_cookie_headers)
     resultats_csrf = []
@@ -44,20 +32,17 @@ def main():
             "formulaire": i,
             "resultat": res
         })
-    #  4. Rapport
-    afficher_rapport(resultats_headers, resultats_cookies,resultats_csrf)
 
+    # 4. Rapport
+    afficher_rapport(resultats_headers, resultats_cookies, resultats_csrf)
 
-# =========================
-# 📊 AFFICHAGE RAPPORT
-# =========================
 
 def afficher_rapport(headers, cookies, csrf):
     print("\n==============================")
     print("   RAPPORT DE SECURITE WEB   ")
     print("==============================\n")
 
-    # 🔐 HEADERS
+    # HEADERS
     print("---- HEADERS ----")
     for nom, info in headers.items():
         if info["statut"] == "ok":
@@ -67,7 +52,7 @@ def afficher_rapport(headers, cookies, csrf):
         elif info["statut"] == "invalide":
             print(f"[INVALIDE] {nom} -> {info['valeur']} | attendu : {info['attendu']}")
 
-    # 🍪 COOKIES
+    # COOKIES
     print("\n---- COOKIES ----")
     if not cookies:
         print("[OK] Aucun problème détecté")
@@ -80,24 +65,17 @@ def afficher_rapport(headers, cookies, csrf):
                 for p in problemes:
                     print(f"  - {p}")
 
-   # CSRF
+    # CSRF
     print("\n---- CSRF ----")
-
     if not csrf:
         print("Aucun formulaire trouvé")
     else:
         for item in csrf:
             num = item["formulaire"]
             res = item["resultat"]
-
             if res["protege"]:
                 print(f"[OK] Formulaire {num} -> {res['raison']}")
             else:
                 print(f"[VULNERABLE] Formulaire {num} -> {res['raison']}")
 
     print("\n==============================\n")
-
-
-# 🔹 Lancement
-if __name__ == "__main__":
-    main()
